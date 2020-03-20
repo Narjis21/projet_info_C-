@@ -1,0 +1,8 @@
+8
+2;Finir le projet d'info;31.03.2020;;2;0;;Projet assez long: commencer tôt.- La partie create_task est terminée mais looping avec les cin- changer de méthode.-Projet assez long: commencer tôt.- La partie create_task est terminée mais looping avec les cin- changer de méthode.-Projet assez long: commencer tôt.- La partie create_task est terminée mais looping avec les cin donc changer de méthode.-;0;Mon Mar  9 19:53:03 2020
+3;Finir le projet d'info;31.03.2020;;2;0;;Projet assez long: commencer tôt.- La partie create_task est terminée mais looping avec les cin- changer de méthode.-Projet assez long: commencer tôt.- La partie create_task est terminée mais looping avec les cin- changer de méthode.-;0;Mon Mar  9 19:53:16 2020
+4;Finir le projet d'info;31.03.2020;;2;0;;Projet assez long: commencer tôt.- La partie create_task est terminée mais looping avec les cin- changer de méthode.-Projet assez long: commencer tôt.- La partie create_task est terminée mais looping avec les cin- changer de méthode.-;0;Mon Mar  9 20:00:24 2020
+5;Jouer à Celeste;01.01.3000;;1;0;;;0;Mon Mar  9 23:10:14 2020
+6;Finir le projet;.;;2;0;;;0;Mon Mar  9 23:31:26 2020
+7;Finir le projet;.;;2;0;;;0;Mon Mar  9 23:31:55 2020
+8;Finir le projet;01.01.3000;;2;0;;;0;Mon Mar  9 23:35:02 2020
