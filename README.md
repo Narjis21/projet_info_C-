@@ -1,2 +1,2 @@
-# projet_info_C-
+# projet_info_C++
 todolist
