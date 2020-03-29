@@ -14,6 +14,12 @@ using namespace std;
 Identifiant;Titre;Deadline;Description;Index Priorités;Index Status;sous tâches sous forme "sstache1-sstache2"; commentaires "com1-com2"; Date de création*/
 
 
+
+
+/*Fonctions annexes de conversions:
+- conversion vector<string>/string
+- conversion int/string*/
+
 void split(const string &chaine, char delimiteur, vector<string> &elements){
     stringstream ss(chaine);
     string sousChaine;
@@ -37,6 +43,8 @@ string vectToStr(vector<string> sous_taches) {
     return ligne.str();
 }
 
+
+
 task strToTask(const string chaine) {
     vector<string> elements = split_vect(chaine, ';');
     int id;
@@ -52,6 +60,7 @@ task strToTask(const string chaine) {
     tache_correspondante.commentaries= split_vect(elements[7], '-');
     tache_correspondante.description=elements[3];
     tache_correspondante.progression=stof(elements[8]);
+    tache_correspondante.str_closure=elements[10];
     return tache_correspondante;
 }
 
@@ -59,16 +68,45 @@ string taskToStr(const task tache) {
     ostringstream ligne;
     ligne<<tache.id<<';'<<tache.title<<';'<<tache.deadline<<';'<<tache.description<<';'
     <<tache.indic_priority<<';'<<tache.indic_status<<';'<<vectToStr(tache.subtask)<<';'
-    <<vectToStr(tache.commentaries)<<';'<<tache.progression<<';'<<tache.str_creation;
+    <<vectToStr(tache.commentaries)<<';'<<tache.progression<<';'<<tache.str_creation<<';'
+    <<tache.str_closure<<';';
     return ligne.str();
 }
 
-string nbToStr(int nombre)
-{
+string nbToStr(int nombre){
     ostringstream a;
     a << nombre;
     return a.str();
 }
+
+/*int strToNb(string ligne){
+    stringstream a(ligne);
+    int nombre(0);
+    a >> nombre;
+    return nombre;
+}*/ //stoi
+
+/*Fonction annexe donnant le temps restant avant la deadline d'une tâche*/
+void time_left(task tache) {
+        if(tache.deadline == "Aucune") {
+            cout<<"Pas de date limite.\n";
+        }
+        else {
+            time_t timestamp_actuel = time(NULL);
+            tm* struct_actuelle = localtime(&timestamp_actuel);
+            vector<string> jour_mois_an = split_vect(tache.deadline, '.');
+            tm struct_deadline;
+            struct_deadline.tm_mday=stoi(jour_mois_an[0]);struct_deadline.tm_mon = stoi(jour_mois_an[1])-1;
+            struct_deadline.tm_year = stoi(jour_mois_an[2])-1900;struct_deadline.tm_sec = 0;struct_deadline.tm_min = 0;
+            struct_deadline.tm_hour = 0;
+            time_t timestamp_deadline = mktime(&struct_deadline);
+            int s = difftime(timestamp_deadline, timestamp_actuel);
+            cout<<"Il vous reste "<<((s/604800))<<" semaine(s), "<<((s%604800)/86400)<<" jour(s) et "<<(((s%604800)%86400)/3600)<<" heure(s).\n";
+        }
+    }
+
+
+/*Fonctions annexes pour la sauvegarde sous format .txt*/
 
 void remplacer_ligne(string fichier, int nb_ligne, string nouvelle_ligne) {
     ifstream lecture(fichier.c_str());
@@ -87,10 +125,31 @@ void remplacer_ligne(string fichier, int nb_ligne, string nouvelle_ligne) {
     rename("fichier_bis.txt", fichier.c_str());
 }
 
+void saving(task tache, string mode = "create") {
+    string ligne = taskToStr(tache);
+    cout<<"\nSauvegarde:\n\n"<<ligne<<endl<<endl;
+    if (tache.str_closure==" "){
+        time_left(tache);
+    }
+    else{
+        cout<<"La tâche a été effectuée et/ou clôturée le "+tache.str_closure+"."<<endl;
+    }
+
+    if(mode=="create"){    
+        ofstream ecriture("sauvegarde.txt", ios::app); //On n'écrase pas le fichier, on rajoute les informations à la fin
+        ecriture<<ligne;
+        }
+    else if(mode=="modify"){
+        remplacer_ligne("sauvegarde.txt", tache.id, ligne);
+    }
+}
+
+/*Fonctions annexes pour récupérer le dernier id et pour assigner les id aux nouvelles tâches créées*/
+
 int read_last_id() {
     int identifiant;
     ifstream lire_identifiant("sauvegarde.txt");
-    lire_identifiant.seekg(0, ios::beg);
+    lire_identifiant.seekg(0, ios::beg); /*Le dernier identifiant stocké en première ligne du fichier sauvegarde*/
     lire_identifiant>>identifiant;
     return identifiant;
 }
@@ -99,26 +158,15 @@ int assign_id() {
     int identifiant = read_last_id();
     identifiant++; /*L'identifiant de chaque tâche sera égal au nombre de fois où 
         on a executé le programme pour créer une tâche */
-    remplacer_ligne("sauvegarde.txt", 1, nbToStr(identifiant));
+    remplacer_ligne("sauvegarde.txt", 1, nbToStr(identifiant)); /*On met à jour le dernier identifiant*/
     return identifiant;
 }
 
-void saving(task tache, string mode = "create") {
-    string ligne = taskToStr(tache);
-    cout<<"\nSauvegarde:\n\n"<<ligne<<endl<<endl;
-    if(mode=="create"){    
-        ofstream ecriture("sauvegarde.txt", ios::app); //On n'écrase pas le fichier puisqu'il existe déjà
-        ecriture<<ligne;
-        }
-    else if(mode=="modify"){
-        remplacer_ligne("sauvegarde.txt", tache.id, ligne);
-    }
 
-}
-
+/*Fonctions donnant les indexes de la liste correspondant aux différents niveaux de priorité/status*/
 int index_priorite(string priorite) {
     vector<string> priorities;
-    priorities.push_back("Facultatif"); priorities.push_back("Normale"); priorities.push_back("Urgente");
+    priorities.push_back("Facultative"); priorities.push_back("Normale"); priorities.push_back("Urgente");
     int index(0);
         while (priorities[index]!=priorite)
         {
@@ -137,6 +185,8 @@ int index_status(string status) {
         }
     return index;
 }
+
+/*Fonction annexes booléennes pour indiquer si les éléments d'une liste correspondent à ceux qu'on veut et pour indiquer si le fichier sauvegarde existe déjà*/
 
 bool correspondance(vector<string> ligne_decoupee, vector<int> indexes, vector<string> criteres){
     bool rep = true;

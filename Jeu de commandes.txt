@@ -1,0 +1,23 @@
+g++ todolist_nocin.cpp -o tdln.exe
+
+./tdln.exe create "Finir le projet de C++" "29.01.2020" "Urgente" "." "." "." "En progression" "50"
+./tdln.exe create "Aller faire les courses"
+./tdln.exe create "Revoir les exercices de MMC" "." "Urgente" "Exercices tenseur des contraintes., Exercices déformation., Exercices méca flu." "." "." "En progression" "20"
+./tdln.exe modify "priorité" "Facultative" //puis choisir l'identifiant de la tâche exercices MMC par exemple
+./tdln.exe modify "progression" "65" //puis choisir projet C++ par exemple
+./tdln.exe list "progression" "0"// résultat -> les courses
+./tdln.exe list "statut" "Terminée" //résultat -> Aucune tâche correspondante
+./tdln.exe modify "statut" "Terminée" //puis choisir les courses par exemple
+./tdln.exe list "statut" "Terminée" //résultat -> juste celle des courses, sa progression est aussi passée à 100 et sa date de clôture a été créée
+./tdln.exe list "priorité" "Urgente" //résultat -> C++ seulement
+./tdln.exe modify "priorité" "Normale" //choisir MMC
+./tdln.exe list "priorité" "Normale" //résultat -> MMC et faire les courses
+./tdln.exe list "priorité" "Normale" "statut" "En progression" //résultat -> MMC seulement
+./tdln.exe list //liste tout
+./tdln.exe modify "commentaires" "Projet assez long: commencer tôt., La partie create_task est terminée mais looping infini avec les cin donc changer de méthode." //projet C++
+./tdln.exe modify "commentaires" "remplacer" "Date butoire déplacée: garder du temps fin mars pour revenir dessus." //projet C++
+./tdln.exe modify "deadline" "31.03.2020"
+./tdln.exe modify "titre" "Finir le projet de C++ et maths info" //va remplacer le titre
+./tdln.exe modify "commentaires" "La partie modify est plus subtile que prévu." //va ajouter un commentaire
+./tdln.exe modify "sous-tâches" "fonction create, fonction modify, fonction list, fonction caractéristique"
+./tdln.exe modify "sous-tâches" "supprimer" "" //va supprimer la dernière sous-tâche
