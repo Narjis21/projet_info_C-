@@ -1,6 +1,6 @@
 # projet_info_C++
 Ordre des caractéristiques dans le fichier sauvegarde: 
-Identifiant;Titre;Deadline;Description;Priorité;Status;sous-tâches; commentaires; progression;date de création;date de clôture;
+Identifiant;Titre;Deadline;Description;Priorité;Statut;sous-tâches; commentaires; progression;date de création;date de clôture;
 
 
 Ordre des arguments à rentrer à la création: "title" "deadline" "priority" "subtask1,subtask2" "description" "commentary" "status" "progression"(seul le premier est obligatoire) ex:
