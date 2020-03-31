@@ -1,4 +1,20 @@
 # projet_info_C++
+
+# Version Interface graphique
+
+Après avoir fini la version command line interface du logiciel, j'ai aussi fait une version interface graphique dont les fonctionnalités de modification et création sont opérationelles mais je n'ai pas eu le temps de faire la partie list parce que je n'ai commencé que ce dimanche (en fait elle sera sûrement prête demain). Je la met quand même parce que j'y ai consacré du temps et que j'aime bien ce que ça donne pour l'instant. La prise en main de cette version est plus intuitive que la première: 
+Rappel:
+        -> La deadline est à rentrer sous forme "dd.mm.yy"
+        -> Les sous-tâches et les commentaires sont à séparer d'une virgule ex: "Partie create., Partie modify."
+        
+Néanmoins, petit problème de dll à l'éxécution du .exe même avec les bons DLL. J'essaie de régler ce problème au plus vite pour que vous puissiez y accéder.
+
+
+
+Un jeu de commandes est fourni pour la version command line interface.
+
+# Version Command Line Interface
+
 Ordre des caractéristiques dans le fichier sauvegarde: 
 Identifiant;Titre;Deadline;Description;Priorité;Statut;sous-tâches; commentaires; progression;date de création;date de clôture;
 
