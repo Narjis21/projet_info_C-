@@ -1,0 +1,12 @@
+﻿12
+2;Aller manger;Aucune;;1;3;;;100;Tue Mar 31 12:28:30 2020; ;
+3;Se brosser les dents;Aucune;;1;3;;;99;Tue Mar 31 12:28:43 2020; ;
+4;Dormir tôt!;02.04.2020;;1;3;;;100;Tue Mar 31 22:14:18 2020;Tue Mar 31 22:34:58 2020;
+5;Omg ça marche ! Trop bien même !;07.04.2020;;1;3;;;99;Tue Mar 31 22:17:05 2020;Tue Mar 31 22:17:05 2020;
+6;Héhé j'espère que les accents passent.;Aucune;;1;0;;;0;Tue Mar 31 12:29:29 2020; ;
+7;Est-ce que ça marche toujours?;02.04.2020;;1;0;;;62;Tue Mar 31 12:32:10 2020; ;
+8;Aller faire les courses.;Aucune;;1;0;;;0;Tue Mar 31 12:32:16 2020; ;
+9;Arranger les problèmes de DLL.;Aucune;;1;0;;;0;Tue Mar 31 12:33:18 2020; ;
+10;Finir la partie liste.;Aucune;;1;0;;;0;Tue Mar 31 12:33:30 2020; ;
+11;Créer la dernière classe.;Aucune;;1;0;;;0;Tue Mar 31 12:33:39 2020; ;
+12;Prendre l'air.;05.06.2020;;2;3;;;100;Tue Mar 31 22:37:40 2020;Tue Mar 31 22:39:09 2020;
