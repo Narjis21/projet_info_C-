@@ -12,7 +12,7 @@
 using namespace std;
 
 
-/* Ordre des caractéristiques dans le fichier sauvegarde: 
+/* Ordre des caractéristiques dans le fichier sauvegarde:
 Identifiant;Titre;Deadline;Description;Index Priorités;Index Status;sous tâches sous forme "sstache1-sstache2"; commentaires "com1-com2"; Date de création*/
 
 
@@ -41,17 +41,17 @@ class task {
 
     task() {}
 
-    task(int identifiant, string titre, string dateLimite, int i_priorite, vector<string> sous_taches, string date_creation = "0") : 
+    task(int identifiant, string titre, string dateLimite, int i_priorite, vector<string> sous_taches, string date_creation = "0") :
     id(identifiant), title(titre), deadline(dateLimite), indic_priority(i_priorite), subtask(sous_taches) {
         priorities.push_back("Facultative"); priorities.push_back("Normale"); priorities.push_back("Urgente");
         status.push_back("Prévue"); status.push_back("Commencée"); status.push_back("En progression"); status.push_back("Terminée");
         if (date_creation == "0"){
-            /*Si la date de création est initialisée à 0, c'est qu'elle vient d'être créee et on veut garder 
-            la chaîne de caractères sans le pointeur nul à la fin pour éviter des problèmes lors des conversions 
+            /*Si la date de création est initialisée à 0, c'est qu'elle vient d'être créee et on veut garder
+            la chaîne de caractères sans le pointeur nul à la fin pour éviter des problèmes lors des conversions
             task/string pour la sauvegarde et inversement.*/
             string pop(time_with_null_caracter);
             pop.pop_back();
-            str_creation = pop; 
+            str_creation = pop;
         }
         else {
             str_creation = date_creation;
@@ -81,16 +81,15 @@ class task {
     }
     void change_commentary(vector<string> commentaire, string type_modif) {
         if (type_modif=="supprimer"){
-            int a = commentaries.size();
-            commentaries[a-1]=" ";
+            commentaries.pop_back();
         }
         else if (type_modif=="remplacer"){
             this->commentaries = commentaire;
         }
         if(type_modif=="ajouter"){
-            for(int j = 0; j<commentaire.size(); j++){
+            for(unsigned int j = 0; j<commentaire.size(); j++){
                 this->commentaries.push_back(commentaire[j]);
-            }  
+            }
         }
     }
     void change_description(string descr) {
@@ -98,16 +97,15 @@ class task {
     }
     void change_subtask(vector<string> sous_tache, string type_modif) {
         if (type_modif=="supprimer"){
-            int a = subtask.size();
             subtask.pop_back();
         }
         else if (type_modif=="remplacer"){
             this->subtask = sous_tache;
         }
         if(type_modif=="ajouter"){
-            for(int j = 0; j<sous_tache.size(); j++){
+            for(unsigned int j = 0; j<sous_tache.size(); j++){
                 this->subtask.push_back(sous_tache[j]);
-            }  
+            }
         }
     }
     void change_status(string stat) {
@@ -119,8 +117,8 @@ class task {
         this->indic_status=index;
         if(stat=="Terminée"){this->close_task();} //clôture automatique de la tâche si le statut est "Terminée"
         else{}
-    }    
-    
+    }
+
     void close_task() {
         if (str_closure==" "){
         const time_t timestamp_closure = time(NULL);
@@ -143,4 +141,5 @@ class task {
     }
 };
 
-#endif
+
+#endif // CLASSE_H

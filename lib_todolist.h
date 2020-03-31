@@ -1,6 +1,7 @@
 #ifndef LIB_TODOLIST_H
 #define LIB_TODOLIST_H
 
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -8,9 +9,9 @@
 #include <vector>
 #include <stdio.h>
 #include "classe.h"
-using namespace std; 
+using namespace std;
 
-/* Ordre des caractéristiques dans le fichier sauvegarde: 
+/* Ordre des caractéristiques dans le fichier sauvegarde:
 Identifiant;Titre;Deadline;Description;Index Priorités;Index Status;sous tâches sous forme "sstache1-sstache2"; commentaires "com1-com2"; Date de création*/
 
 
@@ -37,7 +38,7 @@ vector<string> split_vect(const string &chaine, char delimiteur) {
 
 string vectToStr(vector<string> sous_taches) {
     ostringstream ligne;
-    for (int i = 0; i != sous_taches.size();++i) {
+    for (unsigned int i = 0; i != sous_taches.size();++i) {
         ligne<<sous_taches[i]<<'-';
     }
     return ligne.str();
@@ -93,7 +94,6 @@ void time_left(task tache) {
         }
         else {
             time_t timestamp_actuel = time(NULL);
-            tm* struct_actuelle = localtime(&timestamp_actuel);
             vector<string> jour_mois_an = split_vect(tache.deadline, '.');
             tm struct_deadline;
             struct_deadline.tm_mday=stoi(jour_mois_an[0]);struct_deadline.tm_mon = stoi(jour_mois_an[1])-1;
@@ -135,7 +135,7 @@ void saving(task tache, string mode = "create") {
         cout<<"La tâche a été effectuée et/ou clôturée le "+tache.str_closure+"."<<endl;
     }
 
-    if(mode=="create"){    
+    if(mode=="create"){
         ofstream ecriture("sauvegarde.txt", ios::app); //On n'écrase pas le fichier, on rajoute les informations à la fin
         ecriture<<ligne;
         }
@@ -156,7 +156,7 @@ int read_last_id() {
 
 int assign_id() {
     int identifiant = read_last_id();
-    identifiant++; /*L'identifiant de chaque tâche sera égal au nombre de fois où 
+    identifiant++; /*L'identifiant de chaque tâche sera égal au nombre de fois où
         on a executé le programme pour créer une tâche */
     remplacer_ligne("sauvegarde.txt", 1, nbToStr(identifiant)); /*On met à jour le dernier identifiant*/
     return identifiant;
@@ -190,7 +190,7 @@ int index_status(string status) {
 
 bool correspondance(vector<string> ligne_decoupee, vector<int> indexes, vector<string> criteres){
     bool rep = true;
-    for(int i=0; i<criteres.size(); i++){
+    for(unsigned int i=0; i<criteres.size(); i++){
         if(ligne_decoupee[indexes[i]]!=criteres[i]){
             rep = false;
         }
@@ -203,5 +203,5 @@ bool exist(string nom_du_fichier) {
     return !lecture.fail();
 }
 
-#endif
 
+#endif // LIB_TODOLIST_H
