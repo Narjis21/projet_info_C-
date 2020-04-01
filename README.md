@@ -9,11 +9,15 @@ Rappel:
         
 Néanmoins, petit problème de dll à l'éxécution du .exe même avec les bons DLL. J'essaie de régler ce problème au plus vite pour que vous puissiez y accéder.
 
+               Edit: la version finale de l'interface graphique est dans le dossier version_itgraphique_finale avec les bons DLL et les 3 fonctions sont opérationnelles.
 
 
-Un jeu de commandes est fourni pour la version command line interface.
+
 
 # Version Command Line Interface
+
+Un jeu de commandes est fourni pour la version command line interface. Tous les fichiers pour cette version sont dans le dossier versionCommandLineInterface
+
 
 Ordre des caractéristiques dans le fichier sauvegarde: 
 Identifiant;Titre;Deadline;Description;Priorité;Statut;sous-tâches; commentaires; progression;date de création;date de clôture;
