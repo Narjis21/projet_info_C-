@@ -8,7 +8,6 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     fenetreMode fenetre;
-    //fenetreChoixIdentifiant fenetre;
     fenetre.show();
 
 

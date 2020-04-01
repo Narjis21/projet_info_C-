@@ -22,6 +22,7 @@ fenetreMode::fenetreMode() : QWidget(){
 
     QObject::connect(b_create, SIGNAL(clicked()), this, SLOT(new_w_create()));
     QObject::connect(b_modify, SIGNAL(clicked()), this, SLOT(new_w_modify()));
+    QObject::connect(b_list, SIGNAL(clicked()), this, SLOT(new_w_list()));
 }
 
 fenetreForm::fenetreForm(): QWidget(){
@@ -55,8 +56,7 @@ fenetreForm::fenetreForm(): QWidget(){
 
 
 //Création du Layout formulaire avec ses widgets
-
-    QFormLayout* layout = new QFormLayout;
+    layout = new QFormLayout;
     layout->addRow("Titre", title);
     layout->addRow("Date Limite", deadline);
     layout->addRow("Priorité", priority);
@@ -64,8 +64,7 @@ fenetreForm::fenetreForm(): QWidget(){
     layout->addRow("Description", description);
     layout->addRow("Commentaires", commentary);
     layout->addRow("Statut", status);
-    layout->addRow("Progression", prog_bar);
-    layout->addRow("", prog_lcd);
+
 
 //Layout boutons ok/annuler
 
@@ -146,8 +145,8 @@ fenetreChoixIdentifiant::fenetreChoixIdentifiant(): QWidget(){
 
     this->setLayout(Vlayout);
 
+    QObject::connect(choixIdentifiant, SIGNAL(returnPressed()), this, SLOT(selectTask()));
     QObject::connect(b_ok, SIGNAL(clicked()), this, SLOT(selectTask()));
-    //QObject::connect(choixIdentifiant, SIGNAL(editingFinished()), this, SLOT(selectTask()));
 }
 
 void fenetreChoixIdentifiant::selectTask(){
@@ -190,6 +189,34 @@ void fenetreModify::modify(){
     this->close();
 }
 
-/*fenetreModify::fenetreModify(): fenetreChoixIdentifiant(){
-    caracteristiques_initiales = new QVector<QString>;
-}*/
+void fenetreList::list(){
+    /*On range les réponses de l'utilisateur dans un vecteur*/
+    answers.push_back((this->title->text()).toStdString());answers.push_back((this->deadline->text()).toStdString());answers.push_back((this->description->text()).toStdString());
+    answers.push_back((this->priority->currentText()).toStdString());answers.push_back((this->status->currentText()).toStdString());answers.push_back((this->subtasks->text()).toStdString());
+    answers.push_back((this->commentary->text()).toStdString());answers.push_back((this->progression->text()).toStdString());
+
+    /*On récupère les caractéristiques sélectionnantes et les indexes correspondant*/
+    bool tout = true;
+    for(unsigned int i=0; i<answers.size(); i++){
+        if(answers[i]!=""){
+            tout = false;
+            carac_a_lister.push_back(answers[i]);
+            indexes_carac.push_back(i+1); //correspond aux indexes des caractéristiques dans la sauvegarde
+        }
+    }
+
+    if(tout){
+        carac_a_lister.push_back("tout");
+    }
+
+    fenetre_resultat = new QWidget;
+
+    QTreeWidget* liste = list_task(carac_a_lister, indexes_carac, fenetre_resultat);
+    QVBoxLayout* Vlayout = new QVBoxLayout;
+    Vlayout->addWidget(liste);
+
+    fenetre_resultat->setLayout(Vlayout);
+    fenetre_resultat->show();
+    //QMessageBox::information(this, "Caractéristiques listées", QString::fromStdString(vectToStr(carac_a_lister)));
+    this->close();
+}

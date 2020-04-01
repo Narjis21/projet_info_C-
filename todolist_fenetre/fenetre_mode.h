@@ -12,6 +12,7 @@
 #include <QLabel>
 #include <QListWidget>
 #include <QTreeWidget>
+#include <QFormLayout>
 #include <vector>
 #include <string>
 #include "classe.h"
@@ -33,10 +34,8 @@ class fenetreForm : public QWidget {
 
     Q_OBJECT
 
-    public slots:
-        //void modify();
-        //void list();
     public:
+        QFormLayout* layout;
         QLineEdit* title;
         QLineEdit* deadline;
         QComboBox* priority;
@@ -62,6 +61,8 @@ class fenetreCreate: public fenetreForm {
         void create();
     public:
         fenetreCreate(): fenetreForm(){
+            layout->addRow("Progression", prog_bar);
+            layout->addRow("", prog_lcd);
             QObject::connect(b_ok, SIGNAL(clicked()), this, SLOT(create()));
         };
         ~fenetreCreate(){};
@@ -78,6 +79,8 @@ class fenetreModify: public fenetreForm {
         string date_closure;
         string date_creation;
         fenetreModify(): fenetreForm(){
+            layout->addRow("Progression", prog_bar);
+            layout->addRow("", prog_lcd);
             QObject::connect(b_ok, SIGNAL(clicked()), this, SLOT(modify()));
         };
         ~fenetreModify(){};
@@ -99,23 +102,34 @@ class fenetreChoixIdentifiant: public QWidget {
 
 };
 
-/*class fenetreModify : public fenetreChoixIdentifiant {
+class fenetreList : public fenetreForm {
 
     Q_OBJECT
 
     public slots:
-        void modify();
-    public:
-        fenetreModify();
-        virtual ~fenetreModify(){};
+        void list();
 
-};*/
-
-/*class fenetreList : public QWidget {
     public:
-        fenetreList(){};
+        QLineEdit* progression;
+        QWidget* fenetre_resultat;
+        vector<string> carac_a_lister;
+        vector<int> indexes_carac;
+        fenetreList(): fenetreForm(){
+            //Rajouter de quoi initialiser les Combobox à "" et transformer la progression en QLineEdit pour simplifier
+            priority->addItem("");
+            priority->setCurrentIndex(3);
+            status->addItem("");
+            status->setCurrentIndex(4);
+            progression = new QLineEdit;
+            layout->addRow("Progression", progression);
+            QLabel* lab = new QLabel("Entrez les caractéristiques des tâches à lister:");
+            layout->insertRow(0, lab);
+
+
+            QObject::connect(b_ok, SIGNAL(clicked()), this, SLOT(list()));
+        };
         virtual ~fenetreList(){};
-};*/
+};
 
 class fenetreMode : public QWidget {
 
@@ -127,7 +141,7 @@ class fenetreMode : public QWidget {
         boutonMode* b_list;
         fenetreCreate* w_create;
         fenetreChoixIdentifiant* w_modify;
-        /*fenetreList* w_list;*/
+        fenetreList* w_list;
 
     public slots:
         void new_w_create(){
@@ -140,6 +154,10 @@ class fenetreMode : public QWidget {
             w_modify->show();
         }
 
+        void new_w_list(){
+            w_list = new fenetreList;
+            w_list->show();
+        }
     public:
         fenetreMode();
         virtual ~fenetreMode(){};

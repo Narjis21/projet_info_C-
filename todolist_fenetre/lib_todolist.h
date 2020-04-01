@@ -9,7 +9,7 @@
 #include <vector>
 #include <stdio.h>
 #include <QFile>
-#include <QListWidget>
+#include <QTreeWidget>
 #include "classe.h"
 using namespace std;
 
@@ -102,8 +102,8 @@ string time_left(task tache) {
             struct_deadline.tm_year = stoi(jour_mois_an[2])-1900;struct_deadline.tm_sec = 0;struct_deadline.tm_min = 0;
             struct_deadline.tm_hour = 0;
             time_t timestamp_deadline = mktime(&struct_deadline);
-            int s = difftime(timestamp_deadline, timestamp_actuel);
-            message = "Il vous reste "+nbToStr((s/604800))+" semaine(s), "+nbToStr(((s%604800)/86400)+1)+" jour(s) et "+nbToStr(((s%604800)%86400)/3600)+" heure(s).\n";
+            int s = difftime(timestamp_deadline, timestamp_actuel)+86400;
+            message = "Il vous reste "+nbToStr((s/604800))+" semaine(s), "+nbToStr(((s%604800)/86400))+" jour(s) et "+nbToStr(((s%604800)%86400)/3600)+" heure(s).\n";
             return message;
     }
 
@@ -197,6 +197,9 @@ int index_status(string status) {
 /*Fonction annexes booléennes pour indiquer si les éléments d'une liste correspondent à ceux qu'on veut et pour indiquer si le fichier sauvegarde existe déjà*/
 
 bool correspondance(vector<string> ligne_decoupee, vector<int> indexes, vector<string> criteres){
+    if(criteres[0]=="tout"){
+        return true;
+    }
     bool rep = true;
     for(unsigned int i=0; i<criteres.size(); i++){
         if(ligne_decoupee[indexes[i]]!=criteres[i]){
@@ -224,14 +227,7 @@ task create_task(int identifiant, vector<string> consignes) {
         }
 
         vector<string> sous_taches;
-        sous_taches = split_vect(consignes[5], ',');
-        /*if (consignes[3]==""){
-            sous_taches = split_vect(" ", ' ');
-
-        }
-        else {
-
-        }*/
+        sous_taches = split_vect(consignes[3], ',');
 
 
         task tache_cree(identifiant, consignes[0], date, index_priorite(consignes[2]), sous_taches);
@@ -270,6 +266,66 @@ task select_task(int identifiant){
         i++;
     }
     task res = strToTask(ligne);
+    return res;
+}
+
+QTreeWidget* list_task(vector<string> carac, vector<int> indexes, QWidget* adresse){
+
+    QList<QString> labels; //Les titres des colonnes
+        labels.push_back("Identifiant");
+        labels.push_back("Titre");
+        labels.push_back("Date limite");
+        labels.push_back("Description");
+        labels.push_back("Priorité");
+        labels.push_back("Statut");
+        labels.push_back("Sous-tâches");
+        labels.push_back("Commentaires");
+        labels.push_back("Progression");
+        labels.push_back("Date de création");
+        labels.push_back("Date de clôture");
+        labels.push_back("Temps restant");
+
+
+    QTreeWidget* res = new QTreeWidget(adresse);
+    res->setColumnCount(12);
+    res->setHeaderLabels(labels);
+
+    /*On redéfinit les listes de priorités et de statuts pour ne pas lister les indices seulement.*/
+    vector<string> priorities;
+    priorities.push_back("Facultative"); priorities.push_back("Normale"); priorities.push_back("Urgente");
+    vector<string> statuts;
+    statuts.push_back("Prévue"); statuts.push_back("Commencée"); statuts.push_back("En progression"); statuts.push_back("Terminée");
+
+
+    string ligne;
+    ifstream lire_taches("sauvegarde.txt");
+    std::getline(lire_taches, ligne); //On se place à la deuxième ligne pour lire
+
+    bool existence= false;
+    while (std::getline(lire_taches,ligne)){ //Afficher toutes les informations des tâches vérifiant les critères
+        vector<string> decoupe_ligne = split_vect(ligne, ';');
+        decoupe_ligne[4]=priorities[stoi(decoupe_ligne[4])];
+        decoupe_ligne[5]=statuts[stoi(decoupe_ligne[5])];
+        if(correspondance(decoupe_ligne, indexes, carac)){
+            QTreeWidgetItem* itm = new QTreeWidgetItem(res);
+            existence=true;
+            for(unsigned int i=0; i<decoupe_ligne.size(); i++){
+                itm->setText(i, QString::fromStdString(decoupe_ligne[i]));
+            }
+            if (decoupe_ligne[10]==" "){
+                itm->setText(11, QString::fromStdString(time_left(strToTask(ligne))));
+            }
+            else{
+                itm->setText(11, "Tâche clôturée.");
+            }
+        }
+    }
+    if(existence==false){
+        res->setColumnCount(1);
+        res->setHeaderLabel("");
+        QTreeWidgetItem* itm = new QTreeWidgetItem(res);
+        itm->setText(0,"Aucune tâche ne correspond à votre demande.");
+    }
     return res;
 }
 
